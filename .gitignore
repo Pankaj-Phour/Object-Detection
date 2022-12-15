@@ -8,12 +8,15 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+*.WEIGHTS
+*.weights
 build/
 develop-eggs/
 dist/
 downloads/
 eggs/
 .eggs/
+Yolo/
 lib/
 lib64/
 parts/
