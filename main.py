@@ -1,6 +1,10 @@
 # Importing the libraries and tools needed by our project to detect objects 
-import cv2
+import sys
+
+sys.path
+sys.executable
 import numpy as np
+import cv2
 import time
 
 # We will be needing a YoloV3 weights file and YoloV3 config file to run the project 
@@ -17,7 +21,7 @@ with open('Yolo/coconames.txt','r') as f:
 layer_names = net.getLayerNames()
 # print(layer_names)
 outputlayes = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
-
+# print(outputlayes)
 # generating an array with colors combination with the help of np.random.uniform method
 # np (numpy).random.uniform methods first parameter is used to get result between the given values 
 # For example here it is 0 and 255 so our resulted randomly generated values will be between 0 and 255
@@ -60,11 +64,12 @@ while True:
     confidences = []
     boxes = []
 
-
+    # print(classes)
     for out in outs:
         for detection in out:
             scores = detection[5:]
             class_id = np.argmax(scores)
+            # print(class_id)
             confidence = scores[class_id]
             if confidence > 0.5:
                 # Object detected 
@@ -78,6 +83,7 @@ while True:
                 x = int(center_x - w / 2)
                 y = int(center_y - h / 2)
                 boxes.append([x,y,w,h])
+                # print(boxes)
                 confidences.append(float(confidence))
                 class_ids.append(class_id)
                 # cv2.rectangle(img, (x, y), (x+w, y+h), (0,255,0), 2)
@@ -85,7 +91,7 @@ while True:
     # print(len(boxes))
     objects_detected = len(boxes)
     indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5,0.4)
-    # print(indexes)
+    # print(class_ids)
     font = cv2.FONT_HERSHEY_PLAIN
     for i in range (len(boxes)):
         if i in indexes:
@@ -107,5 +113,5 @@ while True:
     # Showing the images converted from our webcam feed 
     cv2.imshow('image',new_image)
     # Setting wait time for every image to be 1 millisecond 
-    cv2.waitKey(1)
+    cv2.waitKey(10)
     # cv2.destroyAllWindows()
